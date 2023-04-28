@@ -1,6 +1,6 @@
 const {describe, it} = require("node:test");
 const {strictEqual} = require("assert");
-const {ls, pwd} = require("../lib/commands.js");
+const {ls, pwd, cd} = require("../bin/programs.js");
 
 describe("Commsnds", function() {
   it("should output the pwd", function() {
@@ -14,6 +14,13 @@ describe("Commsnds", function() {
     strictEqual(
       "a\tb\tc",
       ls({pwd: "tmp"}).output
+    );
+  });
+
+  it("should change pwd", function() {
+    strictEqual(
+      "./tmp",
+      cd({pwd: "."}, "tmp").env.pwd
     );
   });
 });

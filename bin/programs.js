@@ -8,7 +8,7 @@ const pwd = function(env) {
   };
 }
 
-const ls = function(env) {
+const ls = function(env, ...directories) {
   const fileEntries = fs.readdirSync(env.pwd);
 
   return {
@@ -18,5 +18,22 @@ const ls = function(env) {
   };
 }
 
+const cd = function(env, directory) {
+  if(!fs.existsSync(`${env.pwd}/${directory}/`)) {
+    return {
+      env,
+      output: "",
+      error: "cd: invalid directory"
+    }
+  }
+
+  return {
+    env: {pwd: `${env.pwd}/${directory}`},
+    output: "",
+    error: "",
+  }
+}
+
 exports.ls = ls;
 exports.pwd = pwd;
+exports.cd = cd;
