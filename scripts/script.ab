@@ -1,4 +1,5 @@
 ls
 pwd
-cd something
-abcd
+cd ../../projects
+pwd
+ls

@@ -1,5 +1,23 @@
 const fs = require("fs");
 
+const isAbsPath = function(path) {
+  return path.startsWith("/");
+}
+
+const toAbsPath = function(relativePath, pwd) {
+  return relativePath.split("/").reduce(function(pathComponents, dirName) {
+    if(!dirName || dirName === ".") {
+      return pathComponents;
+    }
+
+    if(dirName === "..") {
+      return pathComponents.length > 1 ? pathComponents.slice(0, -1) :  pathComponents;
+    }
+
+    return [...pathComponents, dirName];
+  }, pwd.split("/")).join("/");
+}
+
 const pwd = function(env) {
   return {
     env, 
@@ -16,16 +34,18 @@ const ls = function(env, ...directories) {
   };
 }
 
-const cd = function(env, directory) {
-  if(!fs.existsSync(`${env.pwd}/${directory}/`)) {
+const cd = function(env, directoryPath) {
+  const potentialPwd = isAbsPath(directoryPath) ? directoryPath : toAbsPath(directoryPath, env.pwd);
+
+  if(!fs.existsSync(potentialPwd)) {
     return {
       env,
-      error: "cd: invalid directory"
+      error: "cd: invalid directory path"
     }
   }
 
   return {
-    env: {pwd: `${env.pwd}/${directory}`},
+    env: {pwd: potentialPwd},
   }
 }
 
