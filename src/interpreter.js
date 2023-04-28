@@ -5,7 +5,7 @@ const execute = function(currentEnv, line) {
 
   if(!executer) {
     console.error(`command not found: ${line.cmd}`);
-    return env;
+    return currentEnv;
   }
 
   const {output, error, env} = executer(currentEnv, ...line.args);
