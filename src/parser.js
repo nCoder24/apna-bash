@@ -1,8 +1,9 @@
 const parseLine = function(executableScript, line) {
   const delimeterPattern = /[ \t]{1,}/;
-  const [command, ...args] = line.trim().split(delimeterPattern);
 
-  return [...executableScript, {command, args}];
+  const [cmd, ...args] = line.trim().split(delimeterPattern);
+
+  return [...executableScript, {cmd, args}];
 }
 
 const parse = function(sourceCode) {
