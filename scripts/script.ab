@@ -1,5 +1,4 @@
-ls
 pwd
-cd ../../projects
+cd /../dev/../usr
 pwd
-ls
+ls .

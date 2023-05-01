@@ -1,12 +1,7 @@
 const fs = require("fs");
-const {interprete} = require("./interpreter.js");
+const {redirect, initializeState} = require("../lib/processHandler.js");
+const {run} = require("./interpreter.js");
 const {parse} = require("./parser.js");
-
-const createNewEnv = function() {
-  return {
-    pwd: process.env.PWD
-  }
-}
 
 const main = function() {
   const scriptFile = process.argv[2];
@@ -19,7 +14,10 @@ const main = function() {
   const script = fs.readFileSync(scriptFile, "utf-8");
   const executableScript = parse(script);
 
-  interprete(executableScript, createNewEnv());
+  const {consoles} = run(executableScript, initializeState());
+
+  redirect(consoles);
+  process.exit(0);
 }
 
 main();

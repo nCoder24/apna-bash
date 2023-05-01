@@ -1,3 +1,4 @@
 fix blank component
 multiple paths in ls
-default cd to home (env += home);
+default cd to home (env += home)
+consoles

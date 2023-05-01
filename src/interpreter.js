@@ -1,23 +1,23 @@
-const programs = require("../bin/programs.js");
+const programs = require("../lib/utils.js");
 
-const execute = function(currentEnv, line) {
-  const executer = programs[line.cmd];
+const evaluate = function(state, line) {
+  const program = programs[line.cmd];
 
-  if(!executer) {
+  if(!program) {
     console.error(`command not found: ${line.cmd}`);
     return currentEnv;
   }
 
-  const {output, error, env} = executer(currentEnv, ...line.args);
+  const {output, error, env} = program(state.env, ...line.args);
 
-  output && console.log(output);
-  error && console.error(error);
-
-  return env;
+  return {
+    env, 
+    consoles: state.consoles.concat({output, error})
+  }
 }
 
-const interprete = function(script, env) {
-  return script.reduce(execute, env);
+const run = function(script, state) {
+  return script.reduce(evaluate, state);
 }
 
-exports.interprete = interprete;
+exports.run = run;
