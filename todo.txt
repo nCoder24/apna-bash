@@ -1,0 +1,3 @@
+fix blank component
+multiple paths in ls
+default cd to home (env += home);
