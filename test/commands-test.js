@@ -12,7 +12,7 @@ describe("Commsnds", function() {
 
   it("should output list of fileEntries", function() {
     strictEqual(
-      "a\tb\tc",
+      "a\tb\tc\tdir",
       ls({pwd: "tmp"}).output
     );
   });
