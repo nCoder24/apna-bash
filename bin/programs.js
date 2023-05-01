@@ -1,22 +1,5 @@
 const fs = require("fs");
-
-const isAbsPath = function(path) {
-  return path.startsWith("/");
-}
-
-const toAbsPath = function(relativePath, pwd) {
-  return relativePath.split("/").reduce(function(pathComponents, dirName) {
-    if(!dirName || dirName === ".") {
-      return pathComponents;
-    }
-
-    if(dirName === "..") {
-      return pathComponents.length > 1 ? pathComponents.slice(0, -1) :  pathComponents;
-    }
-
-    return [...pathComponents, dirName];
-  }, pwd.split("/")).join("/");
-}
+const {absolutePath} = require("../lib/pathHandler.js");
 
 const pwd = function(env) {
   return {
@@ -25,22 +8,29 @@ const pwd = function(env) {
   };
 }
 
-const ls = function(env, ...directories) {
-  const fileEntries = fs.readdirSync(env.pwd);
+const ls = function(env, ...paths) {
+  const listEntries = function(path) {
+    return fs.readdirSync(path).join("\t");
+  }
 
-  return {
-    env, 
-    output: fileEntries.join("\t"),
-  };
+  if(paths.length <= 1) {
+    return { env, output: listEntries(paths[0] || env.pwd) }
+  }
+
+  let lists = paths.map(function(path) {
+    return `${path}:\n${listEntries(path)}`;
+  });
+
+  return { env, output: lists.join("\n\n") };
 }
 
 const cd = function(env, directoryPath) {
-  const potentialPwd = isAbsPath(directoryPath) ? directoryPath : toAbsPath(directoryPath, env.pwd);
+  const potentialPwd = absolutePath(directoryPath, env.pwd);
 
   if(!fs.existsSync(potentialPwd)) {
     return {
       env,
-      error: "cd: invalid directory path"
+      error: `cd: invalid directory path: ${directoryPath}`
     }
   }
 
