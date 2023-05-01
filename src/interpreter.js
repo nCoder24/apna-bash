@@ -1,7 +1,7 @@
-const programs = require("../lib/utils.js");
+const utils = require("../lib/utils.js");
 
 const evaluate = function(state, line) {
-  const program = programs[line.cmd];
+  const program = utils[line.cmd];
 
   if(!program) {
     console.error(`command not found: ${line.cmd}`);

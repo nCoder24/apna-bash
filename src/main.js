@@ -17,7 +17,6 @@ const main = function() {
   const {consoles} = run(executableScript, initializeState());
 
   redirect(consoles);
-  process.exit(0);
 }
 
 main();
